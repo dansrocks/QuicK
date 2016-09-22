@@ -4,19 +4,18 @@ namespace App\Controllers;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Slim\Container;
 
 
 class Welcome
 {
-    private $container = null;
+    private $view = null;
 
     /**
-     * @param Container $container
+     * @param \Slim\Views\PhpRenderer $view
      */
-    public function __construct($container)
+    public function __construct(\Slim\Views\PhpRenderer $view)
     {
-        $this->container = $container;
+        $this->view = $view;
     }
 
     /**
@@ -41,20 +40,9 @@ class Welcome
             $name = 'unknown';
         }
 
-        $response = $this->View($response, 'home.phtml', ["tickets" => 1, "router" => 1]);
+        $response = $this->view->render($response, 'home.phtml', ["tickets" => 1, "router" => 1]);
         $response->getBody()->write("Hello, $name");
 
         return $response;
-    }
-
-    /**
-     * @param Response  $response
-     * @param string    $tmpl
-     * @param mixed[]   $params
-     * @return mixed
-     */
-    private function View(Response $response, $tmpl, $params)
-    {
-        return $this->container['view']->render($response, $tmpl, $params);
     }
 }

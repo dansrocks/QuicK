@@ -7,7 +7,10 @@ $container = new \Slim\Container();
 $container['view'] = function ($container) {
     return new \Slim\Views\PhpRenderer('./templates/');
 };
-
+// Dependency Injection.. should be extends to main Controller Class
+$container['\App\Controllers\Welcome'] = function ($container) {
+    return new \App\Controllers\Welcome($container['view']) ;
+};
 
 $app = new \Slim\App($container);
 
